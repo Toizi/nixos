@@ -12,6 +12,7 @@
     ./restic-server.nix
     ./plex.nix
     ./gotify.nix
+    ./syncthing.nix
     ./open-webui.nix
     ./authelia.nix
   ];
@@ -32,6 +33,8 @@
   boot.loader.grub.enable = true;
 
   zramSwap.enable = true;
+
+  virtualisation.docker.enable = true;
 
   # Key-only SSH, no root login (same policy as the Arch install). Keys come
   # from the private flake.

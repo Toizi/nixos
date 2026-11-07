@@ -1,7 +1,13 @@
 # restic REST server serving the rclone-mounted /backups, behind Caddy.
 # Auth uses /backups/.htpasswd (lives on the storage box, not managed here).
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
+let
+  ordering = {
+    wants = [ "restic-rest-server.service" "caddy.service" ];
+    after = [ "restic-rest-server.service" "caddy.service" ];
+  };
+in
 {
   users.users.backupboi = {
     isSystemUser = true;
@@ -50,4 +56,9 @@
       SystemCallFilter = [ "@system-service" ];
     };
   };
+
+  # The VPS backs itself up to its own REST server (through Caddy), so the
+  # backup/prune jobs must come after both are up.
+  systemd.services.restic-backups-rest = lib.mkIf (config.mg.restic.enable && config.mg.restic.enableRest) ordering;
+  systemd.services.restic-backups-rest-prune = lib.mkIf (config.mg.restic.enable && config.mg.restic.enableRest) ordering;
 }
