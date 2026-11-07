@@ -34,28 +34,54 @@
       private,
       ...
     }:
+    let
+      # Every host gets modules/common and home/common.nix; `modules` and
+      # `homeModules` add the machine-specific parts.
+      mkHost =
+        { modules, homeModules ? [ ] }:
+        nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./modules/common
+            disko.nixosModules.disko
+            sops-nix.nixosModules.sops
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.mg.imports = [
+                ./home/common.nix
+                lazyvim.homeManagerModules.default
+              ] ++ homeModules;
+            }
+          ] ++ modules;
+        };
+    in
     {
-      nixosConfigurations.mg = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./configuration.nix
-          private.nixosModules.default
-          disko.nixosModules.disko
-          sops-nix.nixosModules.sops
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.mg = { config, pkgs, ... }: {
-              imports = [ ./home.nix lazyvim.homeManagerModules.default ];
-              home.packages = with pkgs; [
+      nixosConfigurations = {
+        mg-laptop = mkHost {
+          modules = [
+            ./hosts/laptop
+            private.nixosModules.laptop
+          ];
+          homeModules = [
+            ./home/desktop.nix
+            ({ pkgs, ... }: {
+              home.packages = [
                 llm-agents.packages.x86_64-linux.opencode
                 llm-agents.packages.x86_64-linux.claude-code
                 llm-agents.packages.x86_64-linux.omp
               ];
-            };
-          }
-        ];
+            })
+          ];
+        };
+
+        mg-vps = mkHost {
+          modules = [
+            ./hosts/vps
+            private.nixosModules.vps
+          ];
+        };
       };
     };
 }
