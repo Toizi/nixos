@@ -202,6 +202,21 @@
         "type": "github"
       }
     },
+    "private": {
+      "locked": {
+        "lastModified": 1794071510,
+        "narHash": "sha256-y/GlMoWktzzlO6XraAgNAH6nReZH5yILcvBdy+FcG2Q=",
+        "ref": "refs/heads/main",
+        "rev": "929e9ab62cb2a91b839a3c151a516445bd6da277",
+        "revCount": 1,
+        "type": "git",
+        "url": "file:///home/mg/dev/nixos-private"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/mg/dev/nixos-private"
+      }
+    },
     "root": {
       "inputs": {
         "disko": "disko",
@@ -209,6 +224,7 @@
         "lazyvim": "lazyvim",
         "llm-agents": "llm-agents",
         "nixpkgs": "nixpkgs_3",
+        "private": "private",
         "sops-nix": "sops-nix"
       }
     },
