@@ -1,5 +1,6 @@
-# Headless server. Shared base comes from ../../modules/common; authorized SSH
-# keys, secrets and backup targets are added by the private flake (nixosModules.vps).
+# Headless server (netcup KVM VPS). Shared base comes from ../../modules/common;
+# the static IP, authorized SSH keys, secrets and backup targets are added by the
+# private flake (nixosModules.vps).
 { ... }:
 
 {
@@ -9,21 +10,21 @@
   ];
 
   networking.hostName = "mg-vps";
+  networking.useDHCP = false; # address/gateway are static, see private flake
 
-  # GRUB with an EFI removable fallback + BIOS boot partition (see disk-config.nix).
-  boot.loader.grub = {
-    enable = true;
-    efiSupport = true;
-    efiInstallAsRemovable = true;
-  };
+  # BIOS machine; disko's EF02 partition supplies the GRUB device.
+  boot.loader.grub.enable = true;
 
-  # Key-only SSH; keys come from the private flake.
+  zramSwap.enable = true;
+
+  # Key-only SSH, no root login (same policy as the Arch install). Keys come
+  # from the private flake.
   services.openssh = {
     enable = true;
     settings = {
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
-      PermitRootLogin = "prohibit-password";
+      PermitRootLogin = "no";
     };
   };
 

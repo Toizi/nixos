@@ -1,11 +1,11 @@
-# Generic KVM/QEMU guest. Verify against `nixos-generate-config` output on the
-# target (nixos-anywhere can generate it: --generate-hardware-config).
+# netcup KVM guest (QEMU i440FX, virtio-scsi disk, virtio-net), BIOS boot.
+# Values taken from the running Arch install (lspci, lsblk).
 { lib, modulesPath, ... }:
 
 {
   imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
-  boot.initrd.availableKernelModules = [ "ahci" "xhci_pci" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
+  boot.initrd.availableKernelModules = [ "ata_piix" "virtio_pci" "virtio_scsi" "sd_mod" "sr_mod" ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 }
