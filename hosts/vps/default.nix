@@ -1,12 +1,28 @@
-# Headless server (netcup KVM VPS). Shared base comes from ../../modules/common;
-# the static IP, authorized SSH keys, secrets and backup targets are added by the
-# private flake (nixosModules.vps).
-{ ... }:
+# Headless server. Shared base comes from ../../modules/common; the static IP,
+# authorized SSH keys, secrets and the base domain are added by the private flake
+# (nixosModules.vps).
+{ lib, ... }:
 
 {
   imports = [
     ./hardware-configuration.nix
     ./disk-config.nix
+    ./caddy.nix
+    ./media.nix
+    ./restic-server.nix
+    ./plex.nix
+    ./gotify.nix
+    ./open-webui.nix
+    ./authelia.nix
+  ];
+
+  # Failure/heartbeat notifications go out via Gotify (channel enabled by the
+  # private flake, which supplies the push URL).
+  mg.notify.defaultChannels = [ "gotify" ];
+
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+    "plexmediaserver"
+    "open-webui"
   ];
 
   networking.hostName = "mg-vps";

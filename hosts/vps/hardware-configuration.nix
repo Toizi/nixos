@@ -1,4 +1,4 @@
-# netcup KVM guest (QEMU i440FX, virtio-scsi disk, virtio-net), BIOS boot.
+# KVM guest (QEMU i440FX, virtio-scsi disk, virtio-net), BIOS boot.
 # Values taken from the running Arch install (lspci, lsblk).
 { lib, modulesPath, ... }:
 
