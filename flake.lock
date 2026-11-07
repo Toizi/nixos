@@ -210,11 +210,11 @@
         "rev": "929e9ab62cb2a91b839a3c151a516445bd6da277",
         "revCount": 1,
         "type": "git",
-        "url": "file:///home/mg/dev/nixos-private"
+        "url": "ssh://git@github.com/Toizi/nixos-private"
       },
       "original": {
         "type": "git",
-        "url": "file:///home/mg/dev/nixos-private"
+        "url": "ssh://git@github.com/Toizi/nixos-private"
       }
     },
     "root": {
