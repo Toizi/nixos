@@ -52,6 +52,13 @@
               home-manager.users.mg.imports = [
                 ./home/common.nix
                 lazyvim.homeManagerModules.default
+                ({ ... }: {
+                  home.packages = [
+                    llm-agents.packages.x86_64-linux.opencode
+                    llm-agents.packages.x86_64-linux.claude-code
+                    llm-agents.packages.x86_64-linux.omp
+                  ];
+                })
               ] ++ homeModules;
             }
           ] ++ modules;
@@ -64,16 +71,7 @@
             ./hosts/laptop
             private.nixosModules.laptop
           ];
-          homeModules = [
-            ./home/desktop.nix
-            ({ pkgs, ... }: {
-              home.packages = [
-                llm-agents.packages.x86_64-linux.opencode
-                llm-agents.packages.x86_64-linux.claude-code
-                llm-agents.packages.x86_64-linux.omp
-              ];
-            })
-          ];
+          homeModules = [ ./home/desktop.nix ];
         };
 
         mg-vps = mkHost {
