@@ -35,6 +35,9 @@
   zramSwap.enable = true;
 
   virtualisation.docker.enable = true;
+  # Docker's published ports bypass the NixOS firewall (DNAT + FORWARD chain), so
+  # bind them to loopback unless a container explicitly asks for 0.0.0.0.
+  virtualisation.docker.daemon.settings.ip = "127.0.0.1";
 
   # Key-only SSH, no root login (same policy as the Arch install). Keys come
   # from the private flake.
@@ -47,8 +50,21 @@
     };
   };
 
-  # No password is set for mg (key-only login), so sudo cannot prompt for one.
-  security.sudo.wheelNeedsPassword = false;
+  # Ban hosts that repeatedly fail SSH auth (the default sshd jail is enabled
+  # automatically with openssh). Bans escalate for repeat offenders.
+  services.fail2ban = {
+    enable = true;
+    maxretry = 5;
+    bantime = "1h";
+    bantime-increment = {
+      enable = true;
+      maxtime = "48h";
+    };
+  };
+
+  # Passwords come from sops (users.users.mg.hashedPasswordFile in the private
+  # flake); NixOS only applies them to existing users when users are immutable.
+  users.mutableUsers = false;
 
   system.stateVersion = "26.05";
 }

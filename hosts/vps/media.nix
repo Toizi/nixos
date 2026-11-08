@@ -6,6 +6,18 @@
 {
   imports = [ ../../modules/rclone-mounts.nix ];
 
+  # `rcl <rclone args>`: run rclone as the rclone user with the sops config, which
+  # is only readable by that user. Local paths must be readable by `rclone`
+  # (e.g. under /mediastorage, /backups, /tmp), not by mg only.
+  environment.systemPackages = [
+    (pkgs.writeShellScriptBin "rcl" ''
+      cd /
+      exec /run/wrappers/bin/sudo -u ${config.mg.rclone.user} \
+        env RCLONE_CONFIG=${config.mg.rclone.configFile} \
+        ${lib.getExe pkgs.rclone} "$@"
+    '')
+  ];
+
   mg.rclone.mounts = {
     media = {
       remote = "media:";
