@@ -136,7 +136,7 @@
         {
           key = "Return";
           mods = "Shift";
-          chars = "\\n";
+          chars = "\n";
         }
       ];
 
