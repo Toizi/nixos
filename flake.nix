@@ -14,6 +14,11 @@
     llm-agents = {
       url = "github:numtide/llm-agents.nix";
     };
+    jailed-agents = {
+      url = "github:andersonjoseph/jailed-agents";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.llm-agents.follows = "llm-agents";
+    };
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -29,6 +34,7 @@
       home-manager,
       disko,
       llm-agents,
+      jailed-agents,
       sops-nix,
       lazyvim,
       private,
@@ -52,13 +58,34 @@
               home-manager.users.mg.imports = [
                 ./home/common.nix
                 lazyvim.homeManagerModules.default
-                ({ ... }: {
-                  home.packages = [
-                    llm-agents.packages.x86_64-linux.opencode
-                    llm-agents.packages.x86_64-linux.claude-code
-                    llm-agents.packages.x86_64-linux.omp
-                  ];
-                })
+                ({ pkgs, lib, ... }:
+                  let
+                    jail = jailed-agents.lib.x86_64-linux;
+                    # enableNix mounts /nix and the daemon socket so the agent can
+                    # `nix develop` the project it is started in. Safe only while
+                    # trusted-users stays root-only.
+                    jailOpts = {
+                      enableNix = true;
+                      extraPkgs = [ pkgs.direnv pkgs.nix-direnv ];
+                      extraReadwriteDirs = [ "~/.cache/nix" ];
+                    };
+                  in
+                  {
+                    # jail.nix's `readwrite` errors on missing paths, so create them.
+                    home.activation.jailedAgentDirs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+                      mkdir -p ~/.cache/nix ~/.omp ~/.claude ~/.config/opencode \
+                        ~/.local/share/opencode ~/.local/state/opencode
+                      [ -e ~/.claude.json ] || echo '{}' > ~/.claude.json
+                    '';
+                    home.packages = [
+                      llm-agents.packages.x86_64-linux.opencode
+                      llm-agents.packages.x86_64-linux.claude-code
+                      llm-agents.packages.x86_64-linux.omp
+                      (jail.makeJailedOmp jailOpts)
+                      (jail.makeJailedClaudeCode jailOpts)
+                      (jail.makeJailedOpencode jailOpts)
+                    ];
+                  })
               ] ++ homeModules;
             }
           ] ++ modules;
