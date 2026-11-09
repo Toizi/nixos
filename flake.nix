@@ -106,6 +106,17 @@
           homeModules = [ ./home/desktop.nix ];
         };
 
+        mg-desktop = mkHost {
+          modules = [
+            ./hosts/desktop
+            private.nixosModules.desktop
+          ];
+          homeModules = [
+            ./home/desktop.nix
+            ({ pkgs, ... }: { home.packages = [ pkgs.voxtype ]; })
+          ];
+        };
+
         mg-vps = mkHost {
           modules = [
             liftlog-mcp.nixosModules.default
