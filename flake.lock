@@ -190,6 +190,26 @@
         "type": "github"
       }
     },
+    "liftlog-mcp": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794234441,
+        "narHash": "sha256-oPdyRYGHG0wOQCWGG/I0o0H9gCBv1s2gxRLOemo6YVw=",
+        "ref": "refs/heads/main",
+        "rev": "900e95db48a9c073b51665c7755a23e8d7a7ce06",
+        "revCount": 2,
+        "type": "git",
+        "url": "ssh://git@github.com/Toizi/liftlog-mcp"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/Toizi/liftlog-mcp"
+      }
+    },
     "llm-agents": {
       "inputs": {
         "bun2nix": "bun2nix",
@@ -262,11 +282,11 @@
     },
     "private": {
       "locked": {
-        "lastModified": 1794131860,
-        "narHash": "sha256-EXfPyru6TY27GuP+6klRvKPEBWOJo1v0raRdQb8FCns=",
+        "lastModified": 1794158016,
+        "narHash": "sha256-kDV7x3s2zFQmj7ZKAojzczCsyxe4RiBtFy14/QtcLuc=",
         "ref": "refs/heads/main",
-        "rev": "f7c7b3bcacbdba662d2e941d5eb72662436415a2",
-        "revCount": 7,
+        "rev": "f4ddba5ac8217bfd52e1b55c44bdd40a4eab5ea5",
+        "revCount": 9,
         "type": "git",
         "url": "ssh://git@github.com/Toizi/nixos-private"
       },
@@ -281,6 +301,7 @@
         "home-manager": "home-manager",
         "jailed-agents": "jailed-agents",
         "lazyvim": "lazyvim",
+        "liftlog-mcp": "liftlog-mcp",
         "llm-agents": "llm-agents",
         "nixpkgs": "nixpkgs_3",
         "private": "private",

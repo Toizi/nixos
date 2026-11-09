@@ -19,6 +19,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.llm-agents.follows = "llm-agents";
     };
+    liftlog-mcp = {
+      url = "git+ssh://git@github.com/Toizi/liftlog-mcp";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -35,6 +39,7 @@
       disko,
       llm-agents,
       jailed-agents,
+      liftlog-mcp,
       sops-nix,
       lazyvim,
       private,
@@ -103,6 +108,7 @@
 
         mg-vps = mkHost {
           modules = [
+            liftlog-mcp.nixosModules.default
             ./hosts/vps
             private.nixosModules.vps
           ];

@@ -15,6 +15,7 @@
     ./syncthing.nix
     ./open-webui.nix
     ./authelia.nix
+    ./liftlog.nix
   ];
 
   # Failure/heartbeat notifications go out via Gotify (channel enabled by the
