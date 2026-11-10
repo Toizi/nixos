@@ -105,7 +105,10 @@
             ./hosts/laptop
             private.nixosModules.laptop
           ];
-          homeModules = [ ./home/desktop.nix ];
+          homeModules = [
+            ./home/desktop.nix
+            { mg.hypr.monitors = ./home/hypr/monitors/laptop.lua; }
+          ];
         };
 
         mg-desktop = mkHost {
@@ -115,6 +118,7 @@
           ];
           homeModules = [
             ./home/desktop.nix
+            { mg.hypr.monitors = ./home/hypr/monitors/desktop.lua; }
             ({ pkgs, ... }: { home.packages = [ pkgs.voxtype ]; })
           ];
         };

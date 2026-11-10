@@ -1,5 +1,21 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 {
+  options.mg.hypr.monitors = lib.mkOption {
+    type = lib.types.path;
+    description = "Host-specific Hyprland monitor/workspace Lua file, installed as hyprland/monitors.lua.";
+  };
+
+  config = {
+  # Hyprland config shared by all desktops; only monitors.lua differs per host.
+  xdg.configFile."hypr/hyprland.lua".source = ./hypr/hyprland.lua;
+  xdg.configFile."hypr/hypridle.conf".source = ./hypr/hypridle.conf;
+  xdg.configFile."hypr/hyprlock.conf".source = ./hypr/hyprlock.conf;
+  xdg.configFile."hypr/hyprland" = {
+    source = ./hypr/hyprland;
+    recursive = true;
+  };
+  xdg.configFile."hypr/hyprland/monitors.lua".source = config.mg.hypr.monitors;
+
   home.pointerCursor = {
     enable = true;
     name = "Bibata-Original-Classic";
@@ -307,4 +323,5 @@
     Wants=graphical-session-pre.target
     After=graphical-session-pre.target
   '';
+  };
 }
