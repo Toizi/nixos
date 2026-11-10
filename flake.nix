@@ -28,6 +28,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     lazyvim.url = "github:pfassina/lazyvim-nix";
+    # for testing
+    # private.url = "git+file:../nixos-private";
     private.url = "git+ssh://git@github.com/Toizi/nixos-private";
   };
 

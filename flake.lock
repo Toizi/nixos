@@ -282,11 +282,11 @@
     },
     "private": {
       "locked": {
-        "lastModified": 1794253766,
-        "narHash": "sha256-ifzwDG2HkyAni+4UnXigv2GaRNpoJIBNYX0SaPgg4gU=",
+        "lastModified": 1794297387,
+        "narHash": "sha256-b7STHb6rz42hnqs2dd9jiVhcbiIY47mXdRgcuSlwMrI=",
         "ref": "refs/heads/main",
-        "rev": "5f6de0def1544aada2c4aaaa36ff085253870422",
-        "revCount": 10,
+        "rev": "86a687882391f3e1baf0f23d1199cded54ab52f5",
+        "revCount": 11,
         "type": "git",
         "url": "ssh://git@github.com/Toizi/nixos-private"
       },
