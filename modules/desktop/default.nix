@@ -9,6 +9,9 @@
   programs.hyprland.enable = true;
   programs.hyprlock.enable = true;
 
+  # hypridle's unit PATH lacks bash; ~/.my_scripts/quirk_control_dpms needs bash + flock.
+  systemd.user.services.hypridle.path = with pkgs; [ bash util-linux ];
+
   programs.firefox.enable = true;
   programs.thunderbird.enable = true;
 
