@@ -331,13 +331,37 @@
 
   home.file.".my_scripts".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dev/config/.my_scripts";
-  home.file.".config/systemd/hypr-session.target".text = ''
-    [Unit]
-    Description=hypr compositor session
-    Documentation=man:systemd.special(7)
-    BindsTo=graphical-session.target
-    Wants=graphical-session-pre.target
-    After=graphical-session-pre.target
-  '';
+
+  systemd.user.targets.hypr-session = {
+    Unit = {
+      Description = "hypr compositor session";
+      Documentation = [ "man:systemd.special(7)" ];
+      BindsTo = [ "graphical-session.target" ];
+      Wants = [ "graphical-session-pre.target" ];
+      After = [ "graphical-session-pre.target" ];
+    };
+  };
+
+  systemd.user.services.waybar = {
+    Unit = {
+      Description = "Highly customizable Wayland bar for Sway and Wlroots based compositors";
+      Documentation = [ "https://github.com/Alexays/Waybar/wiki/" ];
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+      Requisite = [ "graphical-session.target" ];
+      # Restart on config/style change; the unit text itself only changes with the package.
+      X-Restart-Triggers = [
+        "${config.xdg.configFile."waybar/config.jsonc".source}"
+        "${./waybar/common.jsonc}"
+        "${./waybar/style.css}"
+      ];
+    };
+    Service = {
+      ExecStart = "${pkgs.waybar}/bin/waybar";
+      ExecReload = "kill -SIGUSR2 $MAINPID";
+      Restart = "on-failure";
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
   };
 }
