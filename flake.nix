@@ -119,6 +119,13 @@
           ];
         };
 
+        mg-homeserver = mkHost {
+          modules = [
+            ./hosts/homeserver
+            private.nixosModules.homeserver
+          ];
+        };
+
         mg-vps = mkHost {
           modules = [
             liftlog-mcp.nixosModules.default
