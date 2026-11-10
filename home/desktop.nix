@@ -1,5 +1,11 @@
 { config, lib, pkgs, ... }:
 {
+  options.mg.waybar.overrides = lib.mkOption {
+    type = lib.types.attrs;
+    default = { };
+    description = "Host-specific waybar settings; the generated config.jsonc includes the shared common.jsonc and wins on conflicts.";
+  };
+
   options.mg.hypr.monitors = lib.mkOption {
     type = lib.types.path;
     description = "Host-specific Hyprland monitor/workspace Lua file, installed as hyprland/monitors.lua.";
@@ -15,6 +21,16 @@
     recursive = true;
   };
   xdg.configFile."hypr/hyprland/monitors.lua".source = config.mg.hypr.monitors;
+
+  # Waybar: shared bar in common.jsonc, host-specific bits via mg.waybar.overrides.
+  xdg.configFile."waybar/common.jsonc".source = ./waybar/common.jsonc;
+  xdg.configFile."waybar/config.jsonc".text = builtins.toJSON (
+    { include = [ "${config.xdg.configHome}/waybar/common.jsonc" ]; } // config.mg.waybar.overrides
+  );
+  xdg.configFile."waybar/style.css".source = ./waybar/style.css;
+  xdg.configFile."waybar/voxtype.css".source = ./waybar/voxtype.css;
+  xdg.configFile."waybar/modules".source = ./waybar/modules;
+  xdg.configFile."waybar/scripts".source = ./waybar/scripts;
 
   home.pointerCursor = {
     enable = true;

@@ -108,6 +108,13 @@
           homeModules = [
             ./home/desktop.nix
             { mg.hypr.monitors = ./home/hypr/monitors/laptop.lua; }
+            {
+              mg.waybar.overrides."modules-right" = [
+                "network#bandwidth-down" "network#bandwidth-up" "network#name" "custom/wireguard"
+                "cpu" "memory" "disk" "temperature" "backlight" "sway/language" "hyprland/language"
+                "pulseaudio" "battery" "battery#bat2" "clock" "idle_inhibitor" "tray"
+              ];
+            }
           ];
         };
 
@@ -119,6 +126,16 @@
           homeModules = [
             ./home/desktop.nix
             { mg.hypr.monitors = ./home/hypr/monitors/desktop.lua; }
+            {
+              mg.waybar.overrides = {
+                "modules-right" = [
+                  "custom/voxtype" "network#bandwidth-down" "network#bandwidth-up" "network#name"
+                  "custom/wireguard" "cpu" "memory" "disk" "temperature" "sway/language"
+                  "hyprland/language" "pulseaudio" "clock" "idle_inhibitor" "tray"
+                ];
+                temperature."hwmon-path" = "/sys/class/hwmon/hwmon4/temp1_input";
+              };
+            }
             ({ pkgs, ... }: { home.packages = [ pkgs.voxtype ]; })
           ];
         };

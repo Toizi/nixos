@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [[ "$(cat /sys/class/net/wg0/operstate)" = 'down' ]]; then
+  echo '{"text":"Disconnected","tooltip":"VPN disconnected","class":"disconnected","percentage":0}'
+else
+  echo '{"text":"Connected","tooltip":"VPN connected","class":"connected","percentage":100}'
+fi
+
