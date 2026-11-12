@@ -29,6 +29,10 @@
     ungoogled-chromium
     pavucontrol
     libnotify
+    (retroarch.withCores (cores: with cores; [
+      mgba
+      mupen64plus
+    ]))
     dunst
   ];
 }
