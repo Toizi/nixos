@@ -21,6 +21,8 @@ let
     ".cache"
     "node_modules"
     "/swap/swapfile"
+    # regenerable by definition (FHS); on the vps this is the rclone VFS cache
+    "/var/cache"
 
     # linux kernel
     "${homeDir}/dev/linux"
